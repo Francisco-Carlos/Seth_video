@@ -1,0 +1,13 @@
+{% extends 'Head_basic.html' %}
+<body>
+    {% block content %}
+        <form action="{% url 'Login' %}" method="POST" >
+            {% csrf_token %}
+            <label > Email:</label>
+            <input type="email" name="Email">
+            <label >Senha</label>
+            <input type="password" name="Senha">
+            <button type="submit"> Ir</button>
+        </form>
+    {% endblock%}
+</body>

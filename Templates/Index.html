@@ -1,0 +1,81 @@
+{% extends 'Head_basic.html' %}
+<body>
+  {% block content %}
+    <style>
+      table{
+        border-collapse: collapse;
+        width: 200px;
+        text-align: center;
+        border: solid 2px black;
+      }
+      th,td{
+        padding: 8px;
+        text-align: center;
+        border-bottom: 2px solid #ddd;
+      }
+      .conta{
+        position: relative;
+        width: 50%;
+      }
+      .vid{
+        display:inline-block;
+        width: 100%;
+        height: auto;
+      }
+      .overlay{
+        position:absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: black;
+        overflow: hidden;
+        width: 100%;
+        height: 0;
+        transition: 0.5s ease;
+      }
+      .conta:hover .overlay{
+        bottom: 0;
+        height: 40%;
+      }
+      .text{
+        color: white;
+        font-size: 20px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%,-50%);
+        -ms-transform: translate(-50%,-50%);
+        transform: translate(-50%,-50%);
+        text-align: center;
+      }
+    </style>
+
+    <div class="container">
+      <h1>Veja seus videos favoritos ou pesquise ou comente ou poste seus proprios videos</h1>
+      <hr>
+      <p>pesquisar</p>
+      <hr>
+      <p>Videos aqui</p>
+      <div class="row row-cols-12">
+          {% for vid in videos %}
+            <div class="conta col">
+              <video width="320" height="240" class="vid" controls autoplay >
+                <source src="{{vid.Video.url}}" >
+              </video>
+              <div class="overlay">
+                <div class="text">
+                  <a href="{% url 'Detalhes' vid.id %}">{{vid.Titulo}}</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+          <div class="col">
+            <p>Teste mais para frente.</p>
+          </div>
+      </div>
+    </div>
+
+
+  {% endblock %}
+</body>
