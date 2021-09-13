@@ -12,6 +12,7 @@ urlpatterns = [
     path('Dashbord',views.Dashbord, name='Dashbord'),
     path('Perfil',views.Perfil, name='Perfil'),
     path('Cadastrar_video', views.Cadastrar_video, name='Cadastrar_video'),
+    path('Excluir,<int:vid_id>', views.Excluir, name = 'Excluir'),
 
     #aqui para baixo e para ver detalhes,e comentarios, e perfil dos videos
 

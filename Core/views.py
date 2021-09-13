@@ -8,6 +8,13 @@ from .forms import Criar_UsuariosForms
 def Index(request):
     """Aqui vai mostrar todos os videos cadastrados."""
     videos = Videos.objects.all()
+    if request.method == 'POST':
+        busca = request.POST['tag']
+        videos = Videos.objects.filter(Categoria__icontains = busca)
+        print(videos)
+        if not videos:
+            print('vaziu')
+            videos = Videos.objects.filter(Titulo__icontains = busca)
     dados = {'videos':videos}
     return render(request,'Index.html',dados)
 #------------------------------------------------------
@@ -111,6 +118,7 @@ def Dashbord(request):
     if request.user.is_authenticated:
         id = request.user.id
         usuario = Usuarios.objects.all().filter(Usuario=id)
+
         video = Videos.objects.all().filter(Usuario=id)
         Criar = Criar_UsuariosForms
         dados = {'usuario':usuario,'Criar':Criar,'video':video}
@@ -119,6 +127,13 @@ def Dashbord(request):
     else:
         return redirect('Index')
 
+def Excluir(request,vid_id):
+    if request.user.is_authenticated:
+        video =  Videos.objects.get(id=vid_id)
+        video.delete()
+        return redirect('Dashbord')
+    else:
+        return render(request,'Index.html')
 #---------------------------------------------------------------
 
 #aqui e a parte dos detalhes dos videos e tambem os comentarios e as paginas dos usuarios que postaram. .
@@ -151,6 +166,12 @@ def Comentar(request,video_id):
 def Pagina_dos_Videos(request,nike_id):
     perfil = Usuarios.objects.get(id=nike_id)
     video = Videos.objects.all().filter(Usuario=perfil.Usuario)
-    dados = {'perfil':perfil, 'video':video}
+    video_all = Videos.objects.all().exclude(Usuario=perfil.Usuario)
+    dados = {'perfil':perfil, 'video':video, 'video_all':video_all}
 
-    return render(request,'Cadastro_de_Perfil.html',dados)
+    return render(request,'pagina_do_perfil.html',dados)
+
+#----------------------------------------------
+#Aqui e a parte de pesquisa
+def pesquisa_de_vida(resquest,tag):
+    pass

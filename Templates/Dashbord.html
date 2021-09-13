@@ -1,5 +1,6 @@
 {% extends 'Head_basic.html' %}
 {% block content %}
+{% load pool_extra %}
     <style>
         img{
             margin-left: 25%;
@@ -7,7 +8,7 @@
         }
         .h4_titulo,h1,p{
             text-align: center;
-            color: white;
+            font-family: 'Metamorphous', cursive;            
             font-size: 25px;
         }
         .div_sty{
@@ -17,6 +18,7 @@
          
         .botao{
             margin-left: 250px;
+            font-family: 'Metamorphous', cursive;
         }
         button:hover{
             opacity: 0.1;
@@ -65,6 +67,7 @@
         .flip-card-front {
             background-color: black;
             color: black;
+
         }
 
         .flip-card-back {
@@ -72,6 +75,10 @@
             color: white;
             border-radius: 15px;
             transform: rotateY(180deg);
+            font-family: 'Metamorphous', cursive;
+        }
+        h4{
+            font-family: 'Metamorphous', cursive;
         }
     </style>
     <div class="container">
@@ -84,7 +91,12 @@
                 <button type="button" data-toggle="modal" data-target="#video" class="botao btn btn-success"> Cadastrar Video</button>
                 
             {% endfor %}
-            <button type="button" data-toggle="modal" data-target="#Perfil" class="botao btn btn-success"> Editar Perfil</button>    
+            {% if not usuario%}
+                <button type="button" data-toggle="modal" data-target="#Criar_Perfil" class="botao btn btn-success"> Criar Perfil</button> 
+            {%else%}
+                <button type="button" data-toggle="modal" data-target="#Editar_Perfil" class="botao btn btn-success"> Editar perfil </button> 
+            {% endif %}
+               
                 
         </div>
         
@@ -110,6 +122,7 @@
                     <p>{{vid.Descricao}}</p>
                 </div>
             </div>
+            <a href="{% url 'Excluir' vid.id %}" class="btn btn-danger"> Excluir</a>
         </div>
         {% endfor %}
         </div>
@@ -130,23 +143,43 @@
                     <form action="{% url 'Cadastrar_video' %}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="form-group">
-                            <label for="titulo"> Titulo: </label>
-                            <input type="text" class="form-control" name="Titulo">
+                            <label > Titulo: </label>
+                            <input type="text" class="form-control" name="Titulo" value="{{video.Titulo}}">
                         </div>
                         <div class="form-group">
-                            <label for="categoria">Categoria: </label>
-                            <input type="text" class="form-control" name="Categoria" id="" placeholder="imagem ou video">
+                            <label >Tags: </label>
+                            <input type="text" class="form-control" name="Categoria"  placeholder="exemplo: video,anime,jogo,carro etc" value="{{vid.Categoria}}">
                         </div>
                         <div class="form-group">
-                            <label for="descricao"> Descriação: </label>
-                            <textarea name="Descricao" id="" cols="20" rows="4" class="form-control"></textarea>
+                            <label > Descriação: </label>
+                            <textarea name="Descricao" id="" cols="20" rows="4" class="form-control" >{{vid.Descricao}}</textarea>
                         </div>
+                        <a href="{{vid.Video.url}}" target="_blank" >video atual</a>
                         <div class="form-group">
                             <label for="video">Escolha seu video</label>
                             <input type="file" name="Video" class="form-control">
                         </div>
                         <button class="btn btn-success" style="width: 470px;" >Enviar</button>
                     </form>
+                <!--Rodape-->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss='modal'>Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Aqui começa a parte de deletar video.-->
+    <div class="modal" id='excluir'>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!--Cabeçalho-->
+                <div class="modal-header">
+                    
+                </div>
+                <!--Corpo-->
+                <div class="modal-body">
+                    <p>oi</p>
                 </div>
                 <!--Rodape-->
                 <div class="modal-footer">
@@ -156,37 +189,73 @@
         </div>
     </div>
 
-
-    <!--Model do Perfil-->
-    <div class="modal" id='Perfil'>
+    <!--Model par Editar o Perfil-->
+    <div class="modal" id='Editar_Perfil'>
         <div class="modal-dialog">
             <div class="modal-content">
                 <!--Cabeçalho-->
                 <div class="modal-header">
                     <h4 class="modal-title">Perfil do {% for use in usuario %} {{use.Nikename}} {% endfor %}</h4>
-                    <button type="button" class="close">&times;</button>
+                    <button type="button" class="close">&times; </button>
                 </div>
                 <!--Corpo-->
                 <div class="modal-body">
                     {% for usu in usuario %}
-                        <form action="{% url 'Perfil' %}" method="POST" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <input type="number" name="Perfil_id"  value="{{usu.id}}" hidden>
-                            <div class="form-group">
-                                <label> Nikename</label>
-                                <input type="text" name="Nikename" class="form-control" value="{{usu.Nikename}}" >
-                            </div>
+                    <form action="{% url 'Perfil' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="number" name="Perfil_id"  value="{{usu.id}}" hidden>
+                        <div class="form-group">
+                            <label> Nikename</label>
+                            <input type="text" name="Nikename" class="form-control" value="{{usu.Nikename}}" >
+                        </div>
 
-                            <div class="form-group">
-                                <label > Foto de Perfil</label>
-                                <a href="{{usu.Foto.url}}" target="_blank" > Foto atual</a>
-                                <input type="file" name="Foto" accept="image/*" class="form-control"  >
-                            </div>
-                            <button class="btn btn-success" type="submit"> Enviar </button>
-
-                            
-                        </form>
+                        <div class="form-group">
+                            <label > Foto de Perfil</label>
+                            <a href="{{usu.Foto.url}}" target="_blank" > Foto atual</a>
+                            <input type="file" name="Foto" accept="image/*" class="form-control"  >
+                        </div>
+                        <button class="btn btn-success" type="submit"> Enviar </button>
+                    </form>
                     {% endfor %}
+                    
+                </div>
+                <!--Rodape-->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss='modal'>Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Aqui e o modal para criar o perfil do usuario-->
+    <div class="modal" id='Criar_Perfil'>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!--Cabeçalho-->
+                <div class="modal-header">
+                    <h4 class="modal-title">Perfil do {% for use in usuario %} {{use.Nikename}} {% endfor %}</h4>
+                    <button type="button" class="close">&times; </button>
+                </div>
+                <!--Corpo-->
+                <div class="modal-body">
+                    
+                    <form action="{% url 'Perfil' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="number" name="Perfil_id"  value="{{usu.id}}" hidden>
+                        <div class="form-group">
+                            <label> Nikename</label>
+                            <input type="text" name="Nikename" class="form-control" value="{{usu.Nikename}}" >
+                        </div>
+
+                        <div class="form-group">
+                            <label > Foto de Perfil</label>
+                            <a href="{{usu.Foto.url}}" target="_blank" > Foto atual</a>
+                            <input type="file" name="Foto" accept="image/*" class="form-control"  >
+                        </div>
+                        <button class="btn btn-success" type="submit"> Enviar </button>
+                    </form>
+                    
+                    
                 </div>
                 <!--Rodape-->
                 <div class="modal-footer">

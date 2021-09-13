@@ -1,4 +1,5 @@
 {% extends 'Head_basic.html' %}
+{% load static %}
 <body>
   {% block content %}
     <style>
@@ -12,6 +13,7 @@
         padding: 8px;
         text-align: center;
         border-bottom: 2px solid #ddd;
+        font-family: 'Metamorphous', cursive;
       }
       .conta{
         position: relative;
@@ -48,18 +50,69 @@
         -ms-transform: translate(-50%,-50%);
         transform: translate(-50%,-50%);
         text-align: center;
+        font-family: 'Metamorphous', cursive;
+      }
+      .btn_{
+        text-align: center;
+        font-family: 'Metamorphous', cursive;
+      }
+      .btn_:hover{
+        background-color: green;
+        width: 100%;
+        transition: 0.5s;
+      }
+      h1{
+        font-family: 'Metamorphous', cursive;
       }
     </style>
 
-    <div class="container">
-      <h1>Veja seus videos favoritos ou pesquise ou comente ou poste seus proprios videos</h1>
+    <div >
+      <!--O carrosel começa aqui.-->
+      <div id="demo" class="carousel slide" data-ride="carousel">
+
+        <!-- Indicators -->
+        <ul class="carousel-indicators">
+          <li data-target="#demo" data-slide-to="0" class="active"></li>
+          <li data-target="#demo" data-slide-to="1"></li>
+          <li data-target="#demo" data-slide-to="2"></li>
+        </ul>
+        
+        <!-- The slideshow -->
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="{% static '1.png' %}" alt="Los Angeles" width="1500" height="500">
+          </div>
+          <div class="carousel-item">
+            <img src="{% static '2.png' %}" alt="Chicago" width="1500" height="500">
+          </div>
+          <div class="carousel-item">
+            <img src="{% static '3.png' %}" alt="New York" width="1500" height="500">
+          </div>
+        </div>
+        
+        <!-- Left and right controls -->
+        <a class="carousel-control-prev" href="#demo" data-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </a>
+        <a class="carousel-control-next" href="#demo" data-slide="next">
+          <span class="carousel-control-next-icon"></span>
+        </a>
+      </div>
+
+      <!--aqui termina-->
+      <div class="container">
       <hr>
-      <p>pesquisar</p>
+      <form action="{% url 'Index' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <input class="form-control" type="text" name="tag" value="coloque um nome ou tag ">
+          <button  type="submit" class="btn btn-primary btn_" >pesquisar</button>
+        </div>
+      </form>
       <hr>
-      <p>Videos aqui</p>
-      <div class="row row-cols-12">
+      <div class="row ">
           {% for vid in videos %}
-            <div class="conta col">
+            <div class="conta col-lg-5 col-sm-6 col-xs-12">
               <video width="320" height="240" class="vid" controls autoplay >
                 <source src="{{vid.Video.url}}" >
               </video>
@@ -70,10 +123,10 @@
               </div>
             </div>
           {% endfor %}
-          <div class="col">
-            <p>Teste mais para frente.</p>
-          </div>
+         
       </div>
+      </div>
+      
     </div>
 
 
