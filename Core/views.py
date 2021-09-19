@@ -55,7 +55,7 @@ def Login(request):
             if user is not None:
                 auth.login(request,user)
                 return redirect('Dashbord')
-    return  render(request,'Login.html')
+    return  render(request,'Index.html')
 
 def Sair(request):
     auth.logout(request)

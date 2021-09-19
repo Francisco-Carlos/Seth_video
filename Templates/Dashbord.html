@@ -91,10 +91,11 @@
                 <button type="button" data-toggle="modal" data-target="#video" class="botao btn btn-success"> Cadastrar Video</button>
                 
             {% endfor %}
+
             {% if not usuario%}
-                <button type="button" data-toggle="modal" data-target="#Criar_Perfil" class="botao btn btn-success"> Criar Perfil</button> 
+                <button type="button" data-toggle="modal" data-target="#Criar_Perfil" class="botao btn btn-success"> Criar Perfil</button>
             {%else%}
-                <button type="button" data-toggle="modal" data-target="#Editar_Perfil" class="botao btn btn-success"> Editar perfil </button> 
+                <button type="button" data-toggle="modal" data-target="#Editar_Perfil" class="botao btn btn-success"> Editar perfil </button>
             {% endif %}
                
                 
@@ -161,6 +162,7 @@
                         </div>
                         <button class="btn btn-success" style="width: 470px;" >Enviar</button>
                     </form>
+                </div>
                 <!--Rodape-->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss='modal'>Fechar</button>
@@ -217,7 +219,7 @@
                         <button class="btn btn-success" type="submit"> Enviar </button>
                     </form>
                     {% endfor %}
-                    
+
                 </div>
                 <!--Rodape-->
                 <div class="modal-footer">
@@ -228,17 +230,17 @@
     </div>
 
     <!--Aqui e o modal para criar o perfil do usuario-->
-    <div class="modal" id='Criar_Perfil'>
+    <div class="modal" id="Criar_Perfil">
         <div class="modal-dialog">
             <div class="modal-content">
                 <!--Cabeçalho-->
                 <div class="modal-header">
-                    <h4 class="modal-title">Perfil do {% for use in usuario %} {{use.Nikename}} {% endfor %}</h4>
+                    <h4 class="modal-title">Novo Perfil</h4>
                     <button type="button" class="close">&times; </button>
                 </div>
                 <!--Corpo-->
                 <div class="modal-body">
-                    
+
                     <form action="{% url 'Perfil' %}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="number" name="Perfil_id"  value="{{usu.id}}" hidden>
@@ -254,8 +256,8 @@
                         </div>
                         <button class="btn btn-success" type="submit"> Enviar </button>
                     </form>
-                    
-                    
+
+
                 </div>
                 <!--Rodape-->
                 <div class="modal-footer">
@@ -264,13 +266,5 @@
             </div>
         </div>
     </div>
+
 {% endblock%}
-   <!--<form action="{% url 'Perfil' %}" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <label>Aplido</label>
-                <input type="text" name="Nikename">
-                <label>foto de Perfil</label>
-                <input type="file" accept="image/*" name="Foto">
-            
-                <button type="submit">ir</button>
-            </form>-->
